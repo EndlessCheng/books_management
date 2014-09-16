@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>山东大学图书管理系统</title>
+	</head>
+	
+	<body>
+	
+		<!--加一个山东大学的校徽图案-->
+		
+		<!--用CSS整合下align等。。-->
+	
+		<h1 align="center">欢迎登陆山东大学图书管理系统</h1>
+		<table border=1 align="center">
+		
+		<!--嗯...我们需要改一个摆放的方向-->
+		
+		<!--加js判断是否存在此用户-->
+		
+			<tr>
+				<th>邮箱</th><th>密码</th>
+				<!--cookies: 保存密码-->
+			</tr>
+			<tr>
+				<td><input name="email" type="text"></td>
+				<td><input name="passwd" type="text"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" vaule="注册">
+			</tr>
+		</table>
+		{% if ismatch %}
+		<!--jump to core page-->
+		{% else %} 
+		<p align="center">用户名或密码错误。</p>
+		{% endif %}
+	</body>
+	
+</html>

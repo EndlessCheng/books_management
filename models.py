@@ -1,7 +1,13 @@
 from django.db import models
 
+# define your class here
+
 class People(models.Model):
+	email = models.EmailField(primary_key=True)
 	name = models.CharField(max_length = 30)
 	sex = models.BooleanField(default = True)
-	email = models.EmailField()
-	
+
+class User(models.Model):
+	email = models.EmailField(max_length = 50, primary_key = True)
+	name = models.CharField(max_length = 40)
+	passwd = models.IntegerField()

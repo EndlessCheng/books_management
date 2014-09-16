@@ -1,0 +1,18 @@
+
+
+
+
+
+
+v0.01
+
+登陆界面（只限本校生借书）
+*注册界面（邮箱注册）
+>> 邮箱，用户名，密码，重复密码
+
+CREATE TABLE books_management_user (email varchar(50) primary key, 
+name varchar(40) NOT NULL default '', passwd varchar(20)) 
+ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+个人借书信息
+查询某本书
