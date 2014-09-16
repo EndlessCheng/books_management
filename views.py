@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import Context
 import datetime
 
-from books_management.models import People, User
+from books_management.models import People, User, Book
 
 # define the logic of your apps here
 
@@ -33,13 +33,13 @@ def list(request):
 	
 def login(request):
 	ismatch = False
-	post = request.POST
-	if post:
+	if request.POST:
+		post = request.POST
 		user = User.objects.get(email = post['email'], passwd = post['passwd'])
 		if len(user) == 1:
 			ismatch = True
-	c = Context({'ismatch': ismatch, }) #, 'email': post['email'][0]
-	return render_to_response('login.html', c)	
+	c = Context({'ismatch': ismatch, 'email': request.POST.get('email', '-'), })
+	return render_to_response('login.html', c)
 	
 def register(request):
 	exist = False
@@ -52,7 +52,18 @@ def register(request):
 			if post['passwd'] == post['repeatpasswd']:
 				same = True
 			else:
-				new_people = People(email = post['email'], name = post['name'], passwd = post['passwd'], )
-				new_people.save()
+				new_user = User(email = post['email'], name = post['name'], passwd = post['passwd'], )
+				new_user.save()
 	c = Context({'exist' : exist, 'same' : same, })
 	return render_to_response('register.html', c)
+
+def findbook(request):
+	if request.POST:
+		post = request.POST
+		book_list = Book.objects.get(bookname = post['bookname'])		
+	c = Context({'book_list' : book_list, })
+	return render_to_response('borrower_main.html', c)
+	
+	
+	
+	

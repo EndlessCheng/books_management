@@ -25,13 +25,14 @@
 				<td><input name="passwd" type="text"></td>
 			</tr>
 			<tr>
-				<td><input type="submit" vaule="注册">
+				<td><input type="submit" text="注册">
+				<!--按钮文字？？？-->
 			</tr>
 		</table>
 		{% if ismatch %}
 		<!--jump to core page-->
 		{% else %} 
-		<p align="center">用户名或密码错误。</p>
+		<p align="center">邮箱 {{ email }} 或密码错误。</p>
 		{% endif %}
 	</body>
 	
