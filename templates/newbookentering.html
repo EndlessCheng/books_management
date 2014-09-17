@@ -5,27 +5,19 @@
 		<title>书籍查询</title>
 		<link type="text/css" rel="stylesheet" href="./css/main.css">
 		<link type="text/css" rel="stylesheet" href="./css/login.css">
-		<style> 
-			#main {position: absolute;width:400px;height:200px;left:50%;top:50%; 
-			margin-left:-200px;margin-top:-100px;} 
-			/*css注释：为了方便截图，对CSS代码进行换行*/ 
-		</style>
 	</head>
 	
 	<body background-color="e2e2e2">
 		<div id="menubar">
-			<ul id="menu_top" align="center">
+			<ul id="menu_top" align="center" style="padding-left:40px;">
     		  	<li><a href="./manager_search.html" target="_self">书籍查询</a></li>
 	  		  	<li><a href="./newbookentering.html" target="_self">新书录入</a></li>
 				<li><a href="./handlingviolation.html" target="_self">违规处理</a></li>
 			</ul>
 		</div>
-		
-		<br />
-		<br />
 	
-		
-		<div id="main">   <!--style="width:300px; margin:0px auto;"-->
+		<br/>
+		<div class="enter_2">   <!--style="width:300px; margin:0px auto;"-->
 			<h3>新书录入</h3>
 			<br/>
 			<input name="isbn" placeholder="ISBN" type="text" /><br/>
@@ -41,11 +33,16 @@
 			<button class="ladda-button submit-button" data-color="blue">
 			  <span class="ladda-label">确认录入</span>
 			</button><br/>
+			
+			<!--
+			
 			{% if issend and ismatch %}
-				<!--alert: 已存在该书-->
+				alert: 已存在该书
 			{% else %} 
-				<!--submit-->
+				submit
 			{% endif %}
+			
+			-->
 		</div>
 		
 	
