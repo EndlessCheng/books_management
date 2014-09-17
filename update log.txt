@@ -7,27 +7,22 @@
 v0.01
 
 登陆界面（只限本校生借书）
+>>根据管理员账号所在区段判断去哪个页面
+
 *注册界面（邮箱注册）
 >> 邮箱，用户名，密码，重复密码
 
-CREATE TABLE books_management_user (email varchar(50) primary key, 
-name varchar(40) NOT NULL default '', passwd varchar(20)) 
-ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 
 
 查询某本书
 
 
 
-create table books_management_book(ISBN bigint(13) primary key, bookname varchar(100) not null, authorname varchar(100) not null, 
-publisher varchar(100) not null, publishtime date not null, price double(10,2) unsigned not null) 
-ENGINE = InnoDB default CHARSET = utf8;
+
 
 个人借书信息
 
 
 （管理员功能）添加书籍
 
-
-问题：
-'django.middleware.csrf.CsrfViewMiddleware', 注释掉为何意？？

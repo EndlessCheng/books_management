@@ -6,18 +6,6 @@ import datetime
 from books_management.models import People, User, Book
 
 # define the logic of your apps here
-
-def hello(request):
-	return HttpResponse("Welcome to books management!")
-	
-def current_time(request):
-	now = datetime.datetime.now()
-	return HttpResponse(now)
-	
-def current_time_in_html(request):
-	now = datetime.datetime.now()
-	c = Context({'time' : now})
-	return render_to_response("time.html", c)
 	
 def insert(request):
 	if request.POST:
@@ -28,7 +16,7 @@ def insert(request):
 	
 def list(request):
 	people_list = People.objects.all()
-	c = Context({'people_list' : people_list, })
+	c = Context({'people_list' : people_list})
 	return render_to_response('list.html', c)
 	
 def login(request):
@@ -38,7 +26,7 @@ def login(request):
 		user = User.objects.get(email = post['email'], passwd = post['passwd'])
 		if len(user) == 1:
 			ismatch = True
-	c = Context({'ismatch': ismatch, 'email': request.POST.get('email', '-'), })
+	c = Context({'ismatch': ismatch, 'email': request.POST.get('email', '-')})
 	return render_to_response('login.html', c)
 	
 def register(request):
@@ -57,13 +45,10 @@ def register(request):
 	c = Context({'exist' : exist, 'same' : same, })
 	return render_to_response('register.html', c)
 
-def findbook(request):
+def borrow(request):
 	if request.POST:
 		post = request.POST
 		book_list = Book.objects.get(bookname = post['bookname'])		
 	c = Context({'book_list' : book_list, })
-	return render_to_response('borrower_main.html', c)
-	
-	
-	
+	return render_to_response('borrow.html', c)
 	
