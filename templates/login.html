@@ -1,41 +1,45 @@
+<!DOCTYPE HTML>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>山东大学图书管理系统</title>
-	</head>
-	
+		<link type="text/css" rel="stylesheet" href="./css/login.css">
+		<style> 
+			#main {position: absolute;width:400px;height:200px;left:50%;top:50%; 
+			margin-left:-200px;margin-top:-100px;} 
+			/*css注释：为了方便截图，对CSS代码进行换行*/ 
+		</style> 
+	</head>	
 	<body>
 	
-		<!--加一个山东大学的校徽图案-->
-		
-		<!--用CSS整合下align等。。-->
+		<!--（舍去）加一个山东大学的校徽图案-->
 		
 		<!--从四个方向移动过来的上，下，左，右-->
 	
-		<h1 align="center">欢迎登陆山东大学图书管理系统</h1>
-		<table border=1 align="center">
-		
-		<!--嗯...我们需要改一个摆放的方向-->
-		
-		<!--加js判断是否存在此用户-->
-		
-			<tr>
-				<th>邮箱</th><th>密码</th>
-				<!--cookies: 保存密码-->
-			</tr>
-			<tr>
-				<td><input name="email" type="text"></td>
-				<td><input name="passwd" type="text"></td>
-			</tr>
-			<tr>
-				<td><input type="submit" text="注册">
-				<!--按钮文字？？？-->
-			</tr>
-		</table>
-		{% if ismatch %}
-		<!--jump to core page-->
-		{% else %} 
-		<p align="center">邮箱 {{ email }} 或密码错误。</p>
-		{% endif %}
+		<div id="main">   <!--style="width:300px; margin:0px auto;"-->
+			<h3>山东大学图书管理系统</h3>
+			<div class="input-prepend">
+			  <span class="add-on"><i class="icon-user"></i></span>
+			  <input class="span2" id="sign_in_account" name="name" placeholder="账号" type="text" value="" />
+			</div><br>
+			<div class="input-prepend">
+			  <span class="add-on"><i class="icon-unlock-alt"></i></span>
+			  <input class="span2" id="sign_in_password" name="password" placeholder="密码" type="password" />
+			</div><br>
+			<div class="control-group">
+			  <input id="remember_me" name="remember_me" type="checkbox" value="true" /> 记住我
+			  | <a href="/users/password/new">忘记密码</a>
+			</div>
+			<button class="ladda-button submit-button" data-color="blue">
+			  <span class="ladda-label">登 录</span>
+			</button>
+			<br/>
+			{% if issend and ismatch %}
+			<!--jump to core page-->
+			{% else %} 
+			<p align="center">账号 {{ account }} 或密码错误。</p>
+			{% endif %}
+		</div>
 	</body>
 	
 </html>
