@@ -3,21 +3,23 @@
 		<title>添加联系人</title>
 	</head>
 	
+	<!--我们需要一个form************-->
+	
 	<form method="post">
 		<table border align="center">
 			<tr>
-				<th>邮箱</th><th>姓名</th><th>性别</th>
+				<th>账号</th><th>密码</th>
 			</tr>
 			<tr>
-				<td><input name="email" type="text"></td>
-				<td><input name="name" type="text"></td>
-				<td>
-					<input name="sex" type="radio" value="M">男
-					<input name="sex" type="radio" value="F">女
-				</td>
-				<td><input type="submit" vaule="保存"><input type="reset" vaule="重填"></td>
+				<td><input name="account" type="text"></td>
+				<td><input name="passwd" type="password"></td>
+				<td><input type="submit" vaule="保存"></td>
 			</tr>
 		</table>
 	</form>
+	<p>{{account}}</p>
+	{% if issend %}
+	<p align="center">  {{account}} </p>
+	{% endif %}
 	
 </html>

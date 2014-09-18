@@ -1,8 +1,9 @@
+# -*- coding: UTF-8 -*-
 #from django.test import TestCase
 
 # Create your tests here.
 
-lst = [1,2,,]
-print type(lst)
-print lst
+print u'你好'
+print type(u'你好')
+
 n=input()
