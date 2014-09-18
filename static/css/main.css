@@ -15,21 +15,11 @@ fieldset {padding:10px;margin:10px;width:96%;color:#333; border:#06c solid 1px;}
 legend {color:#06c;font-weight:800;background:#fff;} 
 
 #menubar{
-	width:100%; 
-	/**/
+	width:74%; /**/
 	height:35px;
-	/**/
 	background-color:#13599f; clear:both; 
-	
-	/*
-	text-align:left; 
-	*/
 	margin:0 auto; 
-	
-	/*
-	padding:5px 0;
-	*/	
-	padding-left: 23%;   /* 23%; */
+	padding-left: 26%; /**/
 	overflow: hidden;
 	background-color: #0074cc;
 	background-image: -moz-linear-gradient(top, #0088cc, #0055cc);

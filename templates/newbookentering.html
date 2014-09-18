@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>书籍查询</title>
+		<title>新书录入</title>
 		<link type="text/css" rel="stylesheet" href="/static/css/main.css">
 		<link type="text/css" rel="stylesheet" href="/static/css/login.css">
 	</head>
@@ -11,42 +11,33 @@
 		<div id="menubar">
 			<ul id="menu_top" align="center">
     		  	<li id="menubar_2"><a href="../manager_search" target="_self">书籍查询</a></li>
-	  		  	<li id="menubar_2"><a href="../newbookentering.html" target="_self">新书录入</a></li>
-				<li id="menubar_2"><a href="../handlingviolation.html" target="_self">违规处理</a></li>
+	  		  	<li id="menubar_2"><a href="../newbookentering" target="_self">新书录入</a></li>
+				<li id="menubar_2"><a href="../handlingviolation" target="_self">违规处理</a></li>
 			</ul>
-		</div>
-	
-		<br/>
-		<div class="enter_2">   <!--style="width:300px; margin:0px auto;"-->
-			<h3>新书录入</h3>
-			<br/>
-			<input name="isbn" placeholder="ISBN" type="text" /><br/>
-			<input name="bookname" placeholder="书名" type="text" /><br/>
-			<input name="bookname" placeholder="数量" type="text" /><br/>
-			<input name="bookname" placeholder="作者" type="text" /><br/>
-			<input name="bookname" placeholder="所属分类" type="text" /><br/>
-			<input name="bookname" placeholder="索书号" type="text" /><br/>
-			<input name="bookname" placeholder="出版社" type="text" /><br/>
-			<input name="bookname" placeholder="出版时间" type="text" /><br/>
-			<input name="bookname" placeholder="价格" type="text" /><br/>
-			<br/>
-			<button class="ladda-button submit-button" data-color="blue">
-			  <span class="ladda-label">确认录入</span>
-			</button><br/>
-			
-			<!--
-			
-			{% if issend and ismatch %}
-				alert: 已存在该书
-			{% else %} 
-				submit
-			{% endif %}
-			
-			-->
-		</div>
+		</div><br/>
 		
-	
-	
+		<div class="enter_2">   <!--style="width:300px; margin:0px auto;"-->
+			<h3>新书录入</h3><br/>
+			<form method="post">
+				<input name="isbn" placeholder="ISBN" type="text" /><br/>
+				<input name="bookname" placeholder="书名" type="text" /><br/>
+				<input name="number" placeholder="数量" type="text" /><br/>
+				<input name="authorname" placeholder="作者" type="text" /><br/>
+				<input name="booktype" placeholder="所属分类" type="text" /><br/>
+				<input name="callnumber" placeholder="索书号" type="text" /><br/>
+				<input name="publisher" placeholder="出版社" type="text" /><br/>
+				<input name="puclishtime" placeholder="出版时间" type="text" /><br/>
+				<input name="price" placeholder="价格" type="text" /><br/>
+				<br/>
+				<input type="submit" value = "确认录入" class="ladda-button submit-button" data-color="blue"><br/>
+			</form>
+			{% if ismatch %}
+				<p>已成功录入。</p>
+			{% else %}
+				<p>请输入长度为 13 位的 ISBN 号。</p>
+			{% endif %}
+		</div><br/>
+		
 	</body>
 	
 </html>

@@ -11,7 +11,7 @@ class User(models.Model):
 	email = models.EmailField(max_length = 50)
 	
 class Book(models.Model):
-	isbn = models.IntegerField(max_length = 13, primary_key = True)
+	isbn = models.BigIntegerField(max_length = 13, primary_key = True)
 	bookname = models.CharField(max_length = 50)
 	number = models.IntegerField()
 	authorname = models.CharField(max_length = 50)
