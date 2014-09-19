@@ -3,7 +3,9 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from django.template import Context
-from books_management.models import User, Book, Borrow, OnlineUser
+from books_management.models import User, Book, Borrow, OnlineUser, Fine
+from decimal import Decimal
+#from django.utils import timezone
 
 from datetime import datetime, timedelta
 
@@ -45,11 +47,14 @@ def search(request):
 		issend = True
 		post = request.POST
 		if post.get('bookname'):
-			book_list = list(Book.objects.filter(bookname__contains = post['bookname']))
-			book_list.extend(list(Book.objects.filter(authorname__contains = post['bookname'])))
-			book_list.extend(list(Book.objects.filter(callnumber__contains = post['bookname'])))
-			book_list.extend(list(Book.objects.filter(publisher__contains = post['bookname'])))
-			book_list = list(set(book_list))
+			if post['bookname'] == '-all':
+				book_list = list(Book.objects.all())
+			else:
+				book_list = list(Book.objects.filter(bookname__contains = post['bookname']))
+				book_list.extend(list(Book.objects.filter(authorname__contains = post['bookname'])))
+				book_list.extend(list(Book.objects.filter(callnumber__contains = post['bookname'])))
+				book_list.extend(list(Book.objects.filter(publisher__contains = post['bookname'])))
+				book_list = list(set(book_list))
 			dict['book_list'] = book_list
 			dict['size'] = len(book_list)
 		else: # decrease the number of book(s), and borrow
@@ -114,12 +119,23 @@ def show_mybook(request):
 		returnbook_list = post.getlist('returnbook_list')
 		dict['returnbook_list'] = returnbook_list
 		dict['returnbook_list_size'] = len(returnbook_list)
+		nowtime = datetime.now()
 		for booknm in returnbook_list:
 			borrow = Borrow.objects.filter(account = onlineuser, isbn = Book.objects.filter(bookname = booknm).first()).first()
-			borrow.delete()
-			book = Book.objects.get(bookname = booknm)
-			book.number += 1
-			book.save()
+			if borrow:
+				borrow.delete()
+				if nowtime.date() > borrow.endtime.date():
+					delta = nowtime.date() - borrow.endtime.date()
+					tmp_fine = Fine.objects.filter(account = onlineuser).first()
+					if tmp_fine:
+						tmp_fine.fine += Decimal(0.5 * delta.days)
+						tmp_fine.save()
+					else:
+						new_fine = Fine(account = onlineuser, fine = 0.5 * delta.days, dealtime = nowtime)
+						new_fine.save()
+				book = Book.objects.get(bookname = booknm)
+				book.number += 1
+				book.save()
 	borrow_list = list(Borrow.objects.filter(account = onlineuser))
 	dict['borrow_list'] = borrow_list
 	dict['borrow_list_size'] = len(borrow_list)
@@ -168,4 +184,28 @@ def newbookentering(request):
 	dict['ismatch'] = ismatch
 	dict['isbnlength'] = isbnlength
 	return render_to_response('newbookentering.html', Context(dict))
+	
+def show_all_borrow(request):
+	issend = False
+	borrow_list = list(Borrow.objects.all())
+	dict = {'borrow_list' : borrow_list, 'borrow_list_size' : len(borrow_list)}
+	return render_to_response('all_borrow.html', Context(dict))
+	
+def dealfine(request):
+	issend = False
+	dict = {}
+	if request.POST:
+		issend = True
+		post = request.POST
+		deal_list = post.getlist('deal_list')
+		dict['deal_list'] = deal_list
+		dict['deal_list_size'] = len(deal_list)
+		for accountnm in deal_list:
+			fine = Fine.objects.filter(account = User.objects.filter(account = accountnm).first()).first()
+			fine.delete()
+	dict['issend'] = issend
+	fine_list = list(Fine.objects.all())
+	dict['fine_list'] = fine_list
+	dict['fine_list_size'] = len(fine_list)
+	return render_to_response('dealfine.html', Context(dict))
 	

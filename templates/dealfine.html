@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>处理罚金</title>
+		<link type="text/css" rel="stylesheet" href="/static/css/main.css">
+		<link type="text/css" rel="stylesheet" href="/static/css/login.css">
+	</head>
+	
+	<body>
+		<div id="menubar">
+			<ul id="menu_top" align="center">
+    		  	<li id="menubar_2"><a href="../manager_search" target="_self">书籍查询</a></li>
+	  		  	<li id="menubar_2"><a href="../newbookentering" target="_self">新书录入</a></li>
+				<li id="menubar_2"><a href="../dealfine" target="_self">处理罚金</a></li>
+			</ul>
+		</div><br/>
+		<br/>
+		<br/>
+		{% if fine_list_size > 0 %}
+			<form method="post">
+				<table id="search" align="center">
+					<tr>
+						<th style="width:140px">账号</th>
+						<th style="width:140px">罚金</th>
+						<th style="width:100px">收费</th>
+					</tr>
+					{% for fine in fine_list %}
+						<tr>
+							<td >{{ fine.account.account }}</td>
+							<td>{{ fine.fine }} 元</td>
+							<td><input type="checkbox" name="deal_list" value="{{ fine.account.account }}"></td>
+						</tr>
+					{% endfor %}
+				</table><br />
+				<input type="submit" value="提交" class="ladda-button submit-button" data-color="blue">
+			</form>
+		{% else %}
+			<p>没有需要处理的罚金。</p>
+		{% endif %}
+		
+		{% if deal_list_size > 0 %}
+			<br />
+			<p>以下用户已收费：</p>
+			{% for account in deal_list %}
+				<p>{{ account }}</p>
+			{% endfor %}
+		{% endif %}	
+		
+	</body>
+	
+</html>

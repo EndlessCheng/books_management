@@ -31,3 +31,8 @@ class Borrow(models.Model):
 	
 class OnlineUser(models.Model):
 	account = models.ForeignKey(User)
+	
+class Fine(models.Model):
+	account = models.ForeignKey(User)
+	fine = models.DecimalField(max_digits = 10, decimal_places = 2)
+	dealtime = models.DateField()
