@@ -10,12 +10,11 @@
 	<body>
 		<div id="menubar">
 			<ul id="menu_top" align="center">
-    		  	<li id="menubar_2"><a href="../manager_search" target="_self">书籍查询</a></li>
+    		  	<li id="menubar_2"><a href="../user_search" target="_self">书籍查询</a></li>
 	  		  	<li id="menubar_2"><a href="../mybook" target="_self">我的书籍</a></li>
-				<li id="menubar_2"><a href="../userinfo" target="_self">用户信息</a></li>
+				<li id="menubar_2"><a href="../userinfo" target="_self">{{ onlineuser }}</a></li>
 			</ul>
-		</div>
-		
+		</div><br />
 		<br />
 		<br />
 		
@@ -58,7 +57,7 @@
 					<p>《{{ borrow }}》</p>
 				{% endfor %}
 			{% elif hadborrow %}
-				<p>您已借阅以下书籍，不能重复借阅：</p>
+				<p>您已借阅以下书籍，不能重复借阅：</p>  <!--或者：在HTML中显示「已借」-->
 				{% for borrow in had_borrow_list %}
 					<p>《{{ borrow }}》</p>
 				{% endfor %}

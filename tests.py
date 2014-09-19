@@ -3,7 +3,15 @@
 
 # Create your tests here.
 
-print u'你好'
-print type(u'你好')
+from datetime import datetime, timedelta
+
+print datetime.now()
+print datetime.now() + timedelta(days = 30)
+
+
+
+
+
+
 
 n=input()

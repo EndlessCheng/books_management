@@ -28,3 +28,6 @@ class Borrow(models.Model):
 	endtime = models.DateTimeField()
 	realtime = models.DateTimeField()
 	add = models.IntegerField(default = 0)
+	
+class OnlineUser(models.Model):
+	account = models.ForeignKey(User)

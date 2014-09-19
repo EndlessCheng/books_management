@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>我的书籍</title>
+		<link type="text/css" rel="stylesheet" href="/static/css/main.css">
+		<link type="text/css" rel="stylesheet" href="/static/css/login.css">
+	</head>
+	
+	<body>
+		<div id="menubar">
+			<ul id="menu_top" align="center">
+    		  	<li id="menubar_2"><a href="../user_search" target="_self">书籍查询</a></li>
+	  		  	<li id="menubar_2"><a href="../mybook" target="_self">我的书籍</a></li>
+				<li id="menubar_2"><a href="../userinfo" target="_self">{{ onlineuser }}</a></li>
+			</ul>
+		</div><br />
+		<br />
+		<br />
+		
+		{% if borrow_list_size > 0 %}
+			<form method="post">
+				<table id="search" align="center">
+					<tr>
+						<th style="width:220px">书名</th>
+						<th style="width:200px">借书时间</th>
+						<th style="width:200px">到期时间</th>
+						<th style="width:100px">续借</th>
+						<th style="width:100px">还书</th>
+					</tr>
+					{% for book in borrow_list %}
+						<tr>
+							<td >{{ book.isbn.bookname }}</td>
+							<td>{{ book.begintime|date:"Y-m-d H:i:s" }}</td>
+							<td>{{ book.endtime|date:"Y-m-d H:i:s" }}</td>
+							{% if book.add == 0 %}
+								<td><input type="checkbox" name="renewbook_list" value="{{ book.isbn.bookname }}"></td>
+							{% else %}
+								<td>已经续借</td>
+							{% endif %}
+							<td><input type="checkbox" name="returnbook_list" value="{{ book.isbn.bookname }}"></td>
+						</tr>
+					{% endfor %}
+				</table><br />
+				<input type="submit" value="提交" class="ladda-button submit-button" data-color="blue">
+			</form>
+		{% else %}
+			<p>您现在一本书也没有借阅哦，快去借几本吧。</p>
+		{% endif %}
+		
+		{% if renewbook_list_size > 0 or returnbook_list_size > 0 %}
+			{% if renewbook_list_size > 0 %}
+				<br />
+				<p>成功续借以下书籍：</p>
+				{% for renewbook in renewbook_list %}
+					<p>《{{ renewbook }}》</p>
+				{% endfor %}
+			{% endif %}
+			{% if returnbook_list_size > 0 %}
+				<br />
+				<p>成功归还以下书籍：</p>
+				{% for returnbook in returnbook_list %}
+					<p>《{{ returnbook }}》</p>
+				{% endfor %}
+			{% endif %}
+		{% endif %}	
+	</body>
+</html>

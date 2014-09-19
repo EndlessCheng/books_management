@@ -3,7 +3,9 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from django.template import Context
-from books_management.models import User, Book
+from books_management.models import User, Book, Borrow, OnlineUser
+
+from datetime import datetime, timedelta
 
 def login(request):
 	issend = False
@@ -19,8 +21,15 @@ def login(request):
 	dict['issend'] = issend
 	dict['ismatch'] = ismatch
 	if ismatch:
-		if dict['account'] != 'root':
-			return HttpResponseRedirect('../user_search') # 怎么把账户传进去？？
+		# update the unique online user
+		onlineuser_list = OnlineUser.objects.all()
+		for onlineuser in onlineuser_list:
+			onlineuser.delete()
+		new_onlineuser = OnlineUser(account = User.objects.filter(account = post['account'], passwd = post['passwd']).first())
+		new_onlineuser.save()
+		# update end
+		if post['account'] != 'root':
+			return HttpResponseRedirect('../user_search')
 		return HttpResponseRedirect('../manager_search')
 	return render_to_response('login.html', Context(dict))
 
@@ -28,7 +37,8 @@ def search(request):
 	issend = False
 	isborrow = False
 	hadborrow = False
-	dict = {}
+	onlineuser = list(OnlineUser.objects.all())[0].account
+	dict = {'onlineuser' : onlineuser.account}
 	if request.POST: # if request.method == 'POST':
 		issend = True
 		post = request.POST
@@ -40,16 +50,13 @@ def search(request):
 			book_list = list(set(book_list))
 			dict['book_list'] = book_list
 			dict['size'] = len(book_list)
-		else:
-			# borrow, and decrease the number of book(s)
-			# NOTE: can't borrow the same book again
-			
+		else: # decrease the number of book(s), and borrow
 			borrow_list = post.getlist('borrow_list')
-			isborrow = True	
+			isborrow = True
 			had_borrow_list = []
-			for booknm in borrow_list:
-				if Borrow.objects.get(account = post['account'], bookname = booknm): # None ???
-					had_borrow_list.append(book.bookname)
+			for booknm in borrow_list: # can't borrow the same book again
+				if Borrow.objects.filter(account = User.objects.filter(account = onlineuser.account).first(), isbn = Book.objects.filter(bookname = booknm).first()):
+					had_borrow_list.append(booknm)
 					isborrow = False
 					hadborrow = True
 			if hadborrow:
@@ -59,6 +66,15 @@ def search(request):
 					book = Book.objects.get(bookname = booknm)
 					book.number -= 1
 					book.save()
+					nowtime = datetime.now()
+					new_borrow = Borrow(
+						account = onlineuser,
+						isbn = Book.objects.filter(bookname = booknm).first(),
+						begintime = nowtime,
+						endtime = nowtime + timedelta(days = 30),
+						realtime = nowtime,
+					)
+					new_borrow.save()
 			dict['borrow_list'] = borrow_list
 	dict['issend'] = issend
 	dict['isborrow'] = isborrow
@@ -71,6 +87,36 @@ def user_search(request):
 def manager_search(request):
 	return render_to_response('manager_search.html', Context(search(request)))
 
+def show_mybook(request):
+	#issend = False
+	onlineuser = list(OnlineUser.objects.all())[0].account
+	dict = {'onlineuser' : onlineuser.account}
+	if request.POST:
+		#issend = True
+		post = request.POST
+		renewbook_list = post.getlist('renewbook_list')
+		dict['renewbook_list'] = renewbook_list
+		dict['renewbook_list_size'] = len(renewbook_list)
+		for booknm in renewbook_list:
+			borrow = Borrow.objects.filter(account = onlineuser, isbn = Book.objects.filter(bookname = booknm).first()).first()
+			borrow.endtime += timedelta(days = 30)
+			borrow.add += 1
+			borrow.save()
+		#
+		returnbook_list = post.getlist('returnbook_list')
+		dict['returnbook_list'] = returnbook_list
+		dict['returnbook_list_size'] = len(returnbook_list)
+		for booknm in returnbook_list:
+			borrow = Borrow.objects.filter(account = onlineuser, isbn = Book.objects.filter(bookname = booknm).first()).first()
+			borrow.delete()
+			book = Book.objects.get(bookname = booknm)
+			book.number += 1
+			book.save()
+	borrow_list = list(Borrow.objects.filter(account = onlineuser))
+	dict['borrow_list'] = borrow_list
+	dict['borrow_list_size'] = len(borrow_list)
+	return render_to_response('mybook.html', Context(dict))
+	
 def show_userinfo(request):
 	dict = {}
 	if request.POST:
@@ -101,6 +147,4 @@ def newbookentering(request):
 	dict['isenter'] = isenter
 	dict['ismatch'] = ismatch
 	return render_to_response('newbookentering.html', Context(dict))
-	
-	
 	
