@@ -4,9 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>书籍查询</title>
 		<link type="text/css" rel="stylesheet" href="/static/css/main.css">
-		
 		<link type="text/css" rel="stylesheet" href="/static/css/login.css">
-		
 	</head>
 	
 	<body>
@@ -32,6 +30,7 @@
 				<tr>
 					<th style="width:220px">书名</th>
 					<th style="width:200px">作者</th>
+					<th style="width:200px">出版社</th>
 					<th style="width:200px">索书号</th>
 					<th style="width:130px">馆藏数量</th>
 				</tr>
@@ -39,6 +38,7 @@
 					<tr>
 						<td>{{ book.bookname }}</td>
 						<td>{{ book.authorname }}</td>
+						<td>{{ book.publisher }}</td>
 						<td>{{ book.callnumber }}</td>
 						<td>{{ book.number }}</td>
 					</tr>

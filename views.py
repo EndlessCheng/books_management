@@ -3,12 +3,8 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from django.template import Context
-#import datetime
-
 from books_management.models import User, Book
 
-# define the logic of your apps here
-	
 def login(request):
 	issend = False
 	ismatch = False
@@ -24,32 +20,56 @@ def login(request):
 	dict['ismatch'] = ismatch
 	if ismatch:
 		if dict['account'] != 'root':
-			return HttpResponseRedirect('../user_search')
+			return HttpResponseRedirect('../user_search') # 怎么把账户传进去？？
 		return HttpResponseRedirect('../manager_search')
 	return render_to_response('login.html', Context(dict))
 
-def register(request):
-	exist = False
-	same = False
+def search(request):
+	issend = False
+	isborrow = False
+	hadborrow = False
 	dict = {}
-	if request.POST:
+	if request.POST: # if request.method == 'POST':
+		issend = True
 		post = request.POST
-		if len(User.objects.get(email = post['email'])) == 1:
-			exist = True
+		if post.get('bookname'):
+			book_list = list(Book.objects.filter(bookname__contains = post['bookname']))
+			book_list.extend(list(Book.objects.filter(authorname__contains = post['bookname'])))
+			book_list.extend(list(Book.objects.filter(callnumber__contains = post['bookname'])))
+			book_list.extend(list(Book.objects.filter(publisher__contains = post['bookname'])))
+			book_list = list(set(book_list))
+			dict['book_list'] = book_list
+			dict['size'] = len(book_list)
 		else:
-			if post['passwd'] == post['repeatpasswd']:
-				same = True
+			# borrow, and decrease the number of book(s)
+			# NOTE: can't borrow the same book again
+			
+			borrow_list = post.getlist('borrow_list')
+			isborrow = True	
+			had_borrow_list = []
+			for booknm in borrow_list:
+				if Borrow.objects.get(account = post['account'], bookname = booknm): # None ???
+					had_borrow_list.append(book.bookname)
+					isborrow = False
+					hadborrow = True
+			if hadborrow:
+				dict['had_borrow_list'] = had_borrow_list
 			else:
-				new_user = User(email = post['email'], name = post['name'], passwd = post['passwd'], )
-				new_user.save()
-	return render_to_response('register.html', Context(dict))
+				for booknm in borrow_list:
+					book = Book.objects.get(bookname = booknm)
+					book.number -= 1
+					book.save()
+			dict['borrow_list'] = borrow_list
+	dict['issend'] = issend
+	dict['isborrow'] = isborrow
+	dict['hadborrow'] = hadborrow
+	return dict
 
 def user_search(request):
-	dict = {}
-	if request.POST:
-		post = request.POST
-		book_list = Book.objects.get(bookname = post['bookname'])	
-	return render_to_response('user_search.html', Context(dict))
+	return render_to_response('user_search.html', Context(search(request)))
+	
+def manager_search(request):
+	return render_to_response('manager_search.html', Context(search(request)))
 
 def show_userinfo(request):
 	dict = {}
@@ -57,16 +77,6 @@ def show_userinfo(request):
 		post = request.POST
 	pass
 
-def manager_search(request):
-	issend = False
-	dict = {}
-	if request.POST:
-		issend = True
-		post = request.POST
-		dict['book_list'] = Book.objects.filter(bookname = post['bookname'])
-	dict['issend'] = issend
-	return render_to_response('manager_search.html', Context(dict))
-	
 def newbookentering(request):
 	isenter = False
 	ismatch = False

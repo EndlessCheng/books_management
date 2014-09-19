@@ -21,4 +21,10 @@ class Book(models.Model):
 	puclishtime = models.DateField()
 	price = models.DecimalField(max_digits = 10, decimal_places = 2)
 	
-	
+class Borrow(models.Model):
+	account = models.ForeignKey(User)
+	isbn = models.ForeignKey(Book)
+	begintime = models.DateTimeField()
+	endtime = models.DateTimeField()
+	realtime = models.DateTimeField()
+	add = models.IntegerField(default = 0)
