@@ -12,57 +12,25 @@
 			<ul id="menu_top" align="center">
     		  	<li id="menubar_2"><a href="../user_search" target="_self">书籍查询</a></li>
 	  		  	<li id="menubar_2"><a href="../mybook" target="_self">我的书籍</a></li>
-				<li id="menubar_2"><a href="../userinfo" target="_self">{{ onlineuser }}</a></li>
+				<li id="menubar_2"><a href="../userinfo" target="_self">{{ onlineuser.account }}</a></li>
 			</ul>
 		</div><br />
 		<br />
 		<br />
 		
 		<form method="post">
-			<input name="bookname" type="text" placeholder="搜索海量书籍"><br />
-			<input type="submit" value="搜索" class="ladda-button submit-button" data-color="blue">
-		</form><br />
+			<input name="passwd" type="password" placeholder="当前密码"><br />
+			<input name="newpasswd" type="password" placeholder="新密码"><br />
+			<input name="renewpasswd" type="password" placeholder="重复新密码"><br />
+			<input type="submit" value="修改密码" class="ladda-button submit-button" data-color="blue">
+		</form>
 		
 		{% if issend %}
-			{% if size > 0 %}
-				<form method="post">
-					<table id="search" align="center">
-						<tr>
-							<th style="width:220px">书名</th>
-							<th style="width:200px">作者</th>
-							<th style="width:200px">出版社</th>
-							<th style="width:200px">索书号</th>
-							<th style="width:130px">馆藏数量</th>
-							<th style="width:130px">借阅</th>
-						</tr>
-						{% for book in book_list %}
-							<tr>
-								<td >{{ book.bookname }}</td>
-								<td>{{ book.authorname }}</td>
-								<td>{{ book.publisher }}</td>
-								<td>{{ book.callnumber }}</td>
-								<td>{{ book.number }}</td>
-								{% if book.number > 0 %}
-									<td><input type="checkbox" name="borrow_list" value="{{ book.bookname }}"></td>
-								{% endif %}
-							</tr>
-						{% endfor %}
-					</table><br />
-					<input type="submit" value="提交" class="ladda-button submit-button" data-color="blue">
-					
-				</form>
-			{% elif isborrow %}
-				<p>成功借阅以下书籍：</p>
-				{% for borrow in borrow_list %}
-					<p>《{{ borrow }}》</p>
-				{% endfor %}
-			{% elif hadborrow %}
-				<p>您已借阅以下书籍，不能重复借阅：</p>  <!--或者：在HTML中显示「已借」-->
-				{% for borrow in had_borrow_list %}
-					<p>《{{ borrow }}》</p>
-				{% endfor %}
+			<br />
+			{% if ismatch %}
+				<p>密码修改成功。</p>
 			{% else %}
-				<p>啊哦，未找到相关书籍。</p>
+				<p>您输入的密码不匹配，请重新输入。</p>
 			{% endif %}	
 		{% endif %}
 	</body>
