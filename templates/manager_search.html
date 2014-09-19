@@ -14,8 +14,7 @@
 	  		  	<li id="menubar_2"><a href="../newbookentering" target="_self">新书录入</a></li>
 				<li id="menubar_2"><a href="../handlingviolation" target="_self">违规处理</a></li>
 			</ul>
-		</div>
-		
+		</div><br />
 		<br />
 		<br />
 		
@@ -23,27 +22,30 @@
 			<input name="bookname" type="text" placeholder="搜索海量书籍"><br />
 			<input type="submit" value="搜索" class="ladda-button submit-button" data-color="blue">
 		</form><br />
-		<br />
 		
 		{% if issend %}
-			<table id="search" align="center">
-				<tr>
-					<th style="width:220px">书名</th>
-					<th style="width:200px">作者</th>
-					<th style="width:200px">出版社</th>
-					<th style="width:200px">索书号</th>
-					<th style="width:130px">馆藏数量</th>
-				</tr>
-				{% for book in book_list %}	
+			{% if size > 0 %}
+				<table id="search" align="center">
 					<tr>
-						<td>{{ book.bookname }}</td>
-						<td>{{ book.authorname }}</td>
-						<td>{{ book.publisher }}</td>
-						<td>{{ book.callnumber }}</td>
-						<td>{{ book.number }}</td>
+						<th style="width:220px">书名</th>
+						<th style="width:200px">作者</th>
+						<th style="width:200px">出版社</th>
+						<th style="width:200px">索书号</th>
+						<th style="width:130px">馆藏数量</th>
 					</tr>
-				{% endfor %}
-			</table>
+					{% for book in book_list %}
+						<tr>
+							<td >{{ book.bookname }}</td>
+							<td>{{ book.authorname }}</td>
+							<td>{{ book.publisher }}</td>
+							<td>{{ book.callnumber }}</td>
+							<td>{{ book.number }}</td>
+						</tr>
+					{% endfor %}
+				</table><br />
+			{% else %}
+				<p>啊哦，未找到相关书籍。</p>
+			{% endif %}	
 		{% endif %}
 	</body>
 </html>

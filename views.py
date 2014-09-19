@@ -145,11 +145,12 @@ def show_userinfo(request):
 def newbookentering(request):
 	isenter = False
 	ismatch = False
+	isbnlength = 13
 	dict = {}
 	if request.POST:
 		isenter = True
 		post = request.POST
-		if len(post['isbn']) == 13:
+		if len(post['isbn']) == isbnlength:
 			ismatch = True
 			new_book = Book(
 				isbn = post['isbn'],
@@ -165,5 +166,6 @@ def newbookentering(request):
 			new_book.save()
 	dict['isenter'] = isenter
 	dict['ismatch'] = ismatch
+	dict['isbnlength'] = isbnlength
 	return render_to_response('newbookentering.html', Context(dict))
 	
