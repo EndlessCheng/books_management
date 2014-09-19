@@ -118,10 +118,21 @@ def show_mybook(request):
 	return render_to_response('mybook.html', Context(dict))
 	
 def show_userinfo(request):
-	dict = {}
+	onlineuser = list(OnlineUser.objects.all())[0].account
+	issend = False
+	ismatch = False
+	dict = {'onlineuser' : onlineuser}
 	if request.POST:
+		issend = True
 		post = request.POST
-	pass
+		user = User.objects.filter(account = onlineuser.account, passwd = post['passwd']).first()
+		if user and post['newpasswd'] == post['renewpasswd']:
+			ismatch = True
+			user.passwd = post['newpasswd'] 
+			user.save()
+	dict['issend'] = issend
+	dict['ismatch'] = ismatch
+	return render_to_response('userinfo.html', Context(dict))
 
 def newbookentering(request):
 	isenter = False
