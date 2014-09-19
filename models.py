@@ -3,7 +3,6 @@
 from django.db import models 
 # django.db.models def all kinds of operations of database, thus it become very easy to use 
 
-# just def the member variable in each class
 class User(models.Model):
 	account = models.CharField(max_length = 20, primary_key = True)
 	name = models.CharField(max_length = 20)
@@ -36,3 +35,4 @@ class Fine(models.Model):
 	account = models.ForeignKey(User)
 	fine = models.DecimalField(max_digits = 10, decimal_places = 2)
 	dealtime = models.DateField()
+	
