@@ -37,8 +37,10 @@ def search(request):
 	issend = False
 	isborrow = False
 	hadborrow = False
+	exceedmax = False
 	onlineuser = list(OnlineUser.objects.all())[0].account
 	dict = {'onlineuser' : onlineuser.account}
+	maxbooknumber = 8
 	if request.POST: # if request.method == 'POST':
 		issend = True
 		post = request.POST
@@ -62,23 +64,29 @@ def search(request):
 			if hadborrow:
 				dict['had_borrow_list'] = had_borrow_list
 			else:
-				for booknm in borrow_list:
-					book = Book.objects.get(bookname = booknm)
-					book.number -= 1
-					book.save()
-					nowtime = datetime.now()
-					new_borrow = Borrow(
-						account = onlineuser,
-						isbn = Book.objects.filter(bookname = booknm).first(),
-						begintime = nowtime,
-						endtime = nowtime + timedelta(days = 30),
-						realtime = nowtime,
-					)
-					new_borrow.save()
+				if len(list(borrow_list)) + len(list(Borrow.objects.filter(account = User.objects.filter(account = onlineuser.account).first()))) <= maxbooknumber:
+					for booknm in borrow_list:
+						book = Book.objects.get(bookname = booknm)
+						book.number -= 1
+						book.save()
+						nowtime = datetime.now()
+						new_borrow = Borrow(
+							account = onlineuser,
+							isbn = Book.objects.filter(bookname = booknm).first(),
+							begintime = nowtime,
+							endtime = nowtime + timedelta(days = 30),
+							realtime = nowtime,
+						)
+						new_borrow.save()
+				else:
+					exceedmax = True
+					isborrow = False
 			dict['borrow_list'] = borrow_list
 	dict['issend'] = issend
 	dict['isborrow'] = isborrow
 	dict['hadborrow'] = hadborrow
+	dict['exceedmax'] = exceedmax
+	dict['maxbooknumber'] = maxbooknumber
 	return dict
 
 def user_search(request):

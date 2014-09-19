@@ -61,6 +61,8 @@
 				{% for borrow in had_borrow_list %}
 					<p>《{{ borrow }}》</p>
 				{% endfor %}
+			{% elif exceedmax %}
+				<p>您不能借阅超过 {{ maxbooknumber }} 本书。</p>
 			{% else %}
 				<p>啊哦，未找到相关书籍。</p>
 			{% endif %}	
