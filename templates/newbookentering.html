@@ -34,7 +34,11 @@
 			{% if ismatch %}
 				<p>已成功录入。</p>
 			{% elif isenter %}
-				<p>请输入长度为 {{ isbnlength }} 位的 ISBN 号。</p>
+{#                {% if not isfull %}#}
+{#                    <p>请输入长度为 {{ isbnlength }} 位的 ISBN 号。</p>#}
+{#                {% else %}#}
+                    <p>请输入有效的书籍信息。</p>
+{#                {% endif %}#}
 			{% endif %}
 		</div><br/>
 		

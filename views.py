@@ -30,9 +30,11 @@ def login(request):
         new_onlineuser = OnlineUser(account=User.objects.filter(account=post['account'], passwd=post['passwd']).first())
         new_onlineuser.save()
         # update end
-        if post['account'] != 'root':
-            return HttpResponseRedirect('../user_search')
-        return HttpResponseRedirect('../manager_search')
+        admin_account_name = ["admin", "root"]
+        for name in admin_account_name:
+            if post['account'] == name:
+                return HttpResponseRedirect('../manager_search')
+        return HttpResponseRedirect('../user_search')
     return render_to_response('login.html', Context(dict))
 
 
@@ -107,11 +109,11 @@ def manager_search(request):
 
 
 def show_mybook(request):
-    #issend = False
+    # issend = False
     onlineuser = list(OnlineUser.objects.all())[0].account
     dict = {'onlineuser': onlineuser.account}
     if request.POST:
-        #issend = True
+        # issend = True
         post = request.POST
         renewbook_list = post.getlist('renewbook_list')
         dict['renewbook_list'] = renewbook_list
@@ -170,13 +172,20 @@ def show_userinfo(request):
 
 def newbookentering(request):
     isenter = False
+    isfull = True
     ismatch = False
     isbnlength = 13
     dict = {}
     if request.POST:
         isenter = True
         post = request.POST
-        if len(post['isbn']) == isbnlength:
+        post_name_list = ['isbn', 'bookname', 'number', 'authorname', 'booktype', 'callnumber', 'publisher',
+                          'puclishtime', 'price']
+        for post_name in post_name_list:
+            if post[post_name] == '':
+                isfull = False
+                break
+        if isfull and len(post['isbn']) == isbnlength:
             ismatch = True
             new_book = Book(
                 isbn=post['isbn'],
@@ -191,6 +200,7 @@ def newbookentering(request):
             )
             new_book.save()
     dict['isenter'] = isenter
+    dict['isfull'] = isfull
     dict['ismatch'] = ismatch
     dict['isbnlength'] = isbnlength
     return render_to_response('newbookentering.html', Context(dict))
