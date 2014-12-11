@@ -60,7 +60,7 @@ def search(request):
                 book_list = list(set(book_list))
             dict['book_list'] = book_list
             dict['size'] = len(book_list)
-        else:  # decrease the number of book(s), and borrow
+        elif post.get('borrow_list'):  # decrease the number of book(s), and borrow
             borrow_list = post.getlist('borrow_list')
             isborrow = True
             had_borrow_list = []
@@ -92,6 +92,14 @@ def search(request):
                     exceedmax = True
                     isborrow = False
             dict['borrow_list'] = borrow_list
+        elif post.get('delete_list'):
+            delete_list = post.getlist('delete_list')
+            isborrow = True
+            for booknm in delete_list:
+                book = Book.objects.get(bookname=booknm)
+                book.number -= 1
+                book.save()
+            dict['delete_list'] = delete_list
     dict['issend'] = issend
     dict['isborrow'] = isborrow
     dict['hadborrow'] = hadborrow
@@ -206,11 +214,11 @@ def newbookentering(request):
     return render_to_response('newbookentering.html', Context(dict))
 
 
-def show_all_borrow(request):
-    issend = False
-    borrow_list = list(Borrow.objects.all())
-    dict = {'borrow_list': borrow_list, 'borrow_list_size': len(borrow_list)}
-    return render_to_response('all_borrow.html', Context(dict))
+# def show_all_borrow(request):
+# issend = False
+# borrow_list = list(Borrow.objects.all())
+#     dict = {'borrow_list': borrow_list, 'borrow_list_size': len(borrow_list)}
+#     return render_to_response('all_borrow.html', Context(dict))
 
 
 def dealfine(request):

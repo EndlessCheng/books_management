@@ -36,20 +36,19 @@
 							<th style="width:130px">借阅</th>
 						</tr>
 						{% for book in book_list %}
+                            {% if book.number > 0 %}
 							<tr>
 								<td >{{ book.bookname }}</td>
 								<td>{{ book.authorname }}</td>
 								<td>{{ book.publisher }}</td>
 								<td>{{ book.callnumber }}</td>
 								<td>{{ book.number }}</td>
-								{% if book.number > 0 %}
-									<td><input type="checkbox" name="borrow_list" value="{{ book.bookname }}"></td>
-								{% endif %}
+								<td><input type="checkbox" name="borrow_list" value="{{ book.bookname }}"></td>
 							</tr>
+                            {% endif %}
 						{% endfor %}
 					</table><br />
 					<input type="submit" value="提交" class="ladda-button submit-button" data-color="blue">
-					
 				</form>
 			{% elif isborrow %}
 				<p>成功借阅以下书籍：</p>
